@@ -1,0 +1,161 @@
+//Module to hold SVA asserts
+`define  word_size 32     //Word Size
+`define  data_length 32	  //Data length should be moved
+`define  address_size 32
+
+module v_dma (clk,rst,CPU_DATA,DMA_RVALID,DMA_RLAST,DMA_BVALID,CPU_DATA_LAST,WHandShake_M1,
+CPU_ADDR,write,read,ReadData,WriteData,Address,WEB,interrupt,load,ACK,word_count
+);
+
+parameter  				word_size= 		32;     //Word Size
+parameter  				data_length= 	32;	  //Data length should be moved
+parameter  				address_size= 	32;
+
+input 					clk;
+input           rst;
+input 					load; 			// CPU signal
+input [word_size-1:0]	ReadData;		//read from DRAM
+input          		DMA_RLAST;
+input 					DMA_RVALID;		// read AXI signal
+input 					DMA_BVALID;		// write AXI signal
+input 					WHandShake_M1;
+
+input [word_size-1:0]	CPU_DATA;		//WDATA_slave
+input [word_size-1:0]	CPU_ADDR;		//AWADDR_slave
+input 					CPU_DATA_LAST;	//WLAST_slave
+input 					write;						
+input 					read;
+input [word_size-1:0]	Address;		//address to AXI
+
+input 			[3:0]	WEB;			//enable
+input 					ACK;			//response for receive start
+input					interrupt;		//Data to CPU
+input [word_size-1:0]	WriteData;
+input [word_size-1:0]	word_count;
+
+parameter 	DMA_IDLE=		4'd0,
+			DMA_START=		4'd1,
+			DMA_LOAD=		4'd2,
+			DMA_READ=		4'd3,
+			DMA_WRITE=		4'd4,
+			DMA_LOAD_W=		4'd5,
+			DMA_FINISH=		4'd6,
+			DMA_MAPPING=	4'd7,
+			GET_S=		4'hA,
+			GET_D= 		4'hB,
+			GET_C= 		4'hC;
+
+
+parameter 				DMA_START_ADDR=		32'hf0000000;			
+parameter 				SRC_ADDR=		32'hf0000004;//4
+parameter 				DST_ADDR=		32'hf0000008;//8
+parameter 				CNT_ADDR=		32'hf0000010;//10
+
+parameter				CNN_ADDR=       32'hdcccffff;// for mapping
+parameter				CNN_Mapping_W=  32'hdccc0000;// for mapping
+parameter				CNN_Mapping_B=  32'hdccc1111;// for mapping
+
+
+parameter				CNN_image_ADDR= 32'hd5550000;
+parameter				CNN_W_ADDR=     32'hd3330000;
+parameter				CNN_Bias_ADDR=  32'hd4440000;
+parameter 				ZERO=			32'd0;
+	default clocking cb @(posedge clk); endclocking
+	default disable iff (rst);
+
+
+
+
+
+	
+  
+
+	IDLE_to_START: assert property(
+		@(posedge clk) disable iff (rst)
+		(DMA.DMA_state==DMA_IDLE&& ((DMA.REG_start_addr==`address_size'd1)||(DMA.REG_start_addr==`address_size'd2)) |=> DMA.DMA_state==DMA_START)
+    );
+
+  IDLE_stay: assert property(
+		@(posedge clk) disable iff (rst)
+		(DMA.DMA_state==DMA_IDLE&& (!((DMA.REG_start_addr==`address_size'd1)||(DMA.REG_start_addr==`address_size'd2))) |=>  $stable(DMA.DMA_state))
+    );
+    
+  START_to_GET_S: assert property(
+		@(posedge clk) disable iff (rst)
+		(DMA.DMA_state==DMA_START&& ((CPU_ADDR==SRC_ADDR)&&CPU_DATA_LAST) |=> DMA.DMA_state==GET_S)
+    );
+
+	START_stay: assert property(
+		@(posedge clk) disable iff (rst)
+		(DMA.DMA_state==DMA_START&& (!((CPU_ADDR==SRC_ADDR)&&CPU_DATA_LAST)) |=>  $stable(DMA.DMA_state))
+    );
+  
+  
+	GET_S_to_GET_D: assert property(
+		@(posedge clk) disable iff(rst)
+		((DMA.DMA_state==GET_S&& (CPU_ADDR==DST_ADDR) && CPU_DATA_LAST) |=> DMA.DMA_state==GET_D)
+    );	
+
+  GET_S_stay: assert property(
+		 @(posedge clk) disable iff (rst)
+		 (DMA.DMA_state==GET_S&& (!((CPU_ADDR==DST_ADDR)&&CPU_DATA_LAST)) |=>  $stable(DMA.DMA_state))
+	 );
+   
+  GET_D_to_GET_C: assert property(
+		@(posedge clk) disable iff(rst)
+		((DMA.DMA_state==GET_D&& (CPU_ADDR==CNT_ADDR) && CPU_DATA_LAST) |=> DMA.DMA_state==GET_C)
+    );
+    
+  GET_D_stay: assert property(
+		@(posedge clk) disable iff(rst)
+		((DMA.DMA_state==GET_D&& !((CPU_ADDR==CNT_ADDR) && CPU_DATA_LAST)) |=> $stable(DMA.DMA_state))
+    ); 
+    
+  LOAD: assert property(
+    @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_LOAD&& load |=> DMA.DMA_state==DMA_READ))
+    ); 
+    
+  LOAD_stay: assert property(
+    @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_LOAD&& !load |=>  $stable(DMA.DMA_state)))
+    ); 
+    
+  READ: assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_READ)&&(DMA.R_count==ZERO)&& DMA_RLAST |=> DMA.DMA_state==DMA_LOAD_W)
+    );  
+    
+  READ_stay:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_READ)&&(!(DMA.R_count==ZERO)&& DMA_RLAST) |=> $stable(DMA.DMA_state))
+    );   
+    
+  WRITE:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_WRITE)&&(DMA.W_count==ZERO)&& WHandShake_M1 |=> DMA.DMA_state==DMA_MAPPING)
+    );   
+    
+  WRITE_stay:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_WRITE)&&(!(DMA.W_count==ZERO)&& WHandShake_M1) |=>$stable(DMA.DMA_state))
+    );   
+    
+  FINISH:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_state==DMA_FINISH)&&((DMA.REG_start_addr==`address_size'd0)||(DMA.REG_start_addr==`address_size'd3))|=> DMA.DMA_state==DMA_IDLE)
+    ); 
+    
+  read_signal:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_nextstate==DMA_READ)|=> read==1'd1)
+    ); 
+  read_signal_stable:assert property(
+  @(posedge clk) disable iff(rst)
+    ((DMA.DMA_nextstate!=DMA_READ)|=> read==1'd0)
+    ); 
+
+endmodule
+
+//Connect module to design
+bind DMA v_dma dma_i (.*);

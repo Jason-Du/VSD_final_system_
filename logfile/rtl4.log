@@ -1,0 +1,424 @@
+maxpend=1
+make[1]: Entering directory `/home/user2/vsd20/vsd2001/all_2/system_ALL_2/sim/prog4'
+riscv64-unknown-elf-gcc  boot.o main.o setup.o isr.o data.o -static -nostdlib -nostartfiles -march=rv32i -mabi=ilp32 -Tlink.ld -lgcc -o main
+riscv64-unknown-elf-objdump -xsd main > main.log
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 0 -j .text0 --change-addresses 0 rom0.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 1 -j .text0 --change-addresses 0 rom1.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 2 -j .text0 --change-addresses 0 rom2.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 3 -j .text0 --change-addresses 0 rom3.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 0 -R .text0 --change-addresses -0x20000000 dram0.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 1 -R .text0 --change-addresses -0x20000000 dram1.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 2 -R .text0 --change-addresses -0x20000000 dram2.hex
+riscv64-unknown-elf-objcopy -O verilog main -i 4 -b 3 -R .text0 --change-addresses -0x20000000 dram3.hex
+make[1]: Leaving directory `/home/user2/vsd20/vsd2001/all_2/system_ALL_2/sim/prog4'
+irun(64): 15.20-s039: (c) Copyright 1995-2017 Cadence Design Systems, Inc.
+file: /home/user2/vsd20/vsd2001/all_2/system_ALL_2/./sim/top_tb.sv
+`define CYCLE 12.0 // Cycle time
+                                |
+ncvlog: *W,MACNDF (/home/user2/vsd20/vsd2001/all_2/system_ALL_2/./sim/top_tb.sv,2|32): The text macro 'CYCLE' has also been defined on the command line using the -DEFINE command line option.  The compiler will ignore the definition found in the Verilog source code.
+`define MAX 125000000 // Max cycle number
+                                         |
+ncvlog: *W,MACNDF (/home/user2/vsd20/vsd2001/all_2/system_ALL_2/./sim/top_tb.sv,4|41): The text macro 'MAX' has also been defined on the command line using the -DEFINE command line option.  The compiler will ignore the definition found in the Verilog source code.
+    $value$plusargs("prog_path=%s", prog_path);
+                  |
+ncvlog: *W,NOSYST (/home/user2/vsd20/vsd2001/all_2/system_ALL_2/./sim/top_tb.sv,245|18): System function '$value$plusargs' invoked as a task. Return value will be ignored.
+		  $fscanf(gf, "%h\n", GOLDEN[num]);
+		        |
+ncvlog: *W,NOSYST (/home/user2/vsd20/vsd2001/all_2/system_ALL_2/./sim/top_tb.sv,288|10): System function '$fscanf' invoked as a task. Return value will be ignored.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 2
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		$unit_0x69c2d6b1
+		layer2_cnn
+		layer3_maxpooling_v2
+		layer4_cnn
+		layer5_cnn
+		layer6_maxpooling_v2
+		layer7_fc
+		layer7_write_mem_arbitor
+		layer7_local_mem_weight
+		layer2_result_one_side_mem
+		layer3_result_mem
+		layer4_result_mem
+		layer5_result_one_side_mem
+		layer6_result_mem
+		top_tb
+ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+    $readmemh({prog_path, "/rom0.hex"}, i_ROM.Memory_byte0);
+                                                         |
+ncelab: *W,MEMODR (../sim/top_tb.sv,248|57): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/rom1.hex"}, i_ROM.Memory_byte1);
+                                                         |
+ncelab: *W,MEMODR (../sim/top_tb.sv,249|57): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/rom2.hex"}, i_ROM.Memory_byte2);
+                                                         |
+ncelab: *W,MEMODR (../sim/top_tb.sv,250|57): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/rom3.hex"}, i_ROM.Memory_byte3);
+                                                         |
+ncelab: *W,MEMODR (../sim/top_tb.sv,251|57): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/dram0.hex"}, i_DRAM.Memory_byte0);
+                                                           |
+ncelab: *W,MEMODR (../sim/top_tb.sv,252|59): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/dram1.hex"}, i_DRAM.Memory_byte1);
+                                                           |
+ncelab: *W,MEMODR (../sim/top_tb.sv,253|59): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/dram2.hex"}, i_DRAM.Memory_byte2);
+                                                           |
+ncelab: *W,MEMODR (../sim/top_tb.sv,254|59): $readmem default memory order incompatible with IEEE1364.
+    $readmemh({prog_path, "/dram3.hex"}, i_DRAM.Memory_byte3);
+                                                           |
+ncelab: *W,MEMODR (../sim/top_tb.sv,255|59): $readmem default memory order incompatible with IEEE1364.
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.AWADDR_Reg:sv <0x0f7cbf44>
+			streams:   5, words:  1626
+		worklib.AXI:sv <0x631902ba>
+			streams:  43, words: 11496
+		worklib.Arbiter_2M:sv <0x0d869e60>
+			streams:   6, words:  3695
+		worklib.Arbiter_3M:sv <0x5368e9be>
+			streams:   6, words:  5955
+		worklib.CNN_wrapper_layer1:sv <0x65315bfa>
+			streams:  16, words: 22734
+		worklib.CPU:sv <0x13eb5d21>
+			streams:  13, words:  2479
+		worklib.CPU_wrapper:sv <0x2d890946>
+			streams:  57, words: 53352
+		worklib.CSR:sv <0x2e4dc63d>
+			streams:  45, words: 22755
+		worklib.DA_process:sv <0x11fc4b21>
+			streams:   5, words:  2310
+		worklib.DMA:sv <0x1dc7bdd8>
+			streams:  59, words: 34952
+		worklib.DMA_wrapper:sv <0x51aaccc9>
+			streams:  44, words: 51572
+		worklib.DRAM:sv <0x1afc04f7>
+			streams:  46, words: 35731
+		worklib.DRAM_wrapper:sv <0x518a197d>
+			streams:  14, words: 68855
+		worklib.Decoder_M2S_projR:sv <0x2505ee78>
+			streams:   2, words:  1715
+		worklib.Decoder_M2S_projW:sv <0x507b6823>
+			streams:   2, words:  1717
+		worklib.DefaultSlave:sv <0x3c9d6f49>
+			streams:   7, words:  4091
+		worklib.EX_MEM_Reg:sv <0x64ab4ca6>
+			streams:   4, words:  6902
+		worklib.ID_EX_Reg:sv <0x39e58a0e>
+			streams:   5, words: 11184
+		worklib.IF_ID_Reg:sv <0x14d4f79d>
+			streams:   7, words:  3202
+		worklib.IG:sv <0x71ccc908>
+			streams:   1, words:  2910
+		worklib.L1C_data:sv <0x30d64bd7>
+			streams:  28, words: 41564
+		worklib.L1C_inst:sv <0x6120157e>
+			streams:  21, words: 24917
+		worklib.MEM_WB_Reg:sv <0x3838079f>
+			streams:   4, words:  5393
+		worklib.Mux2to1_32bit:sv <0x01f2a3f9>
+			streams:   1, words:   234
+		worklib.Mux3to1:sv <0x36bda3e5>
+			streams:   1, words:   322
+		worklib.Mux4to1:sv <0x1b6fb28e>
+			streams:   1, words:   350
+		worklib.Mux4to1:sv <0x213ab699>
+			streams:   1, words:   410
+		worklib.Mux4to1_csr:sv <0x53271592>
+			streams:   1, words:  2958
+		worklib.Mux5to1:sv <0x261970fe>
+			streams:   1, words:   378
+		worklib.ROM:v <0x38f65306>
+			streams:   3, words:  1511
+		worklib.ROM_wrapper:sv <0x15a0d024>
+			streams:   8, words:  9930
+		worklib.Read_FSM:sv <0x18b0ea55>
+			streams:   3, words:  1407
+		worklib.SCtrl_wrapper:sv <0x514769b3>
+			streams:  16, words: 28899
+		worklib.SRAM:sv <0x150c3bcf>
+			streams:  61, words: 19862
+		worklib.SRAM:sv <0x23fca73c>
+			streams:  61, words: 19862
+		worklib.SRAM_wrapper:sv <0x014f3029>
+			streams:  48, words: 67076
+		worklib.Write_FSM:sv <0x45e8f89a>
+			streams:   3, words:  1659
+		worklib.alu:sv <0x30f46e46>
+			streams:   2, words:  5431
+		worklib.channel8_tree_adder:sv <0x19f94a17>
+			streams:   1, words:  3127
+		worklib.cnn:sv <0x6c829c05>
+			streams:  94, words: 24773
+		worklib.compare_result:sv <0x37a37ea3>
+			streams:   1, words:  5704
+		worklib.control:sv <0x3d829241>
+			streams:   1, words: 31951
+		worklib.controller:sv <0x28d27067>
+			streams:  13, words: 49558
+		worklib.counter:sv <0x63bad51c>
+			streams:   3, words:   904
+		worklib.counter_cnn:sv <0x3faa1df8>
+			streams:   3, words:   899
+		worklib.counter_cnn:sv <0x682eacc6>
+			streams:   3, words:   899
+		worklib.counter_delay:sv <0x69a5c7d9>
+			streams:   3, words:   927
+		worklib.counter_dram:sv <0x35d370b9>
+			streams:   3, words:   858
+		worklib.counter_sram:sv <0x412c0a2d>
+			streams:   3, words:   813
+		worklib.data_array:sv <0x4a93a3bf>
+			streams:  58, words: 57895
+		worklib.dma_sram:sv <0x1d8a312d>
+			streams:  59, words: 19427
+		worklib.flush:sv <0x6dc5de3c>
+			streams:   1, words:   280
+		worklib.forwardUnit:sv <0x06f2515b>
+			streams:   3, words:  2341
+		worklib.forwardUnit_csr:sv <0x6cf75dc7>
+			streams:   2, words:  1435
+		worklib.hazard:sv <0x1dcdacbc>
+			streams:   5, words:  2105
+		worklib.image_set_register:sv <0x5521dc93>
+			streams:   3, words:   757
+		worklib.interrupt_register:sv <0x3cd110ec>
+			streams:   3, words:   681
+		worklib.layer1_cnn:sv <0x324ff73c>
+			streams: 268, words: 220318
+		worklib.layer1_result_mem:sv <0x0c2fb42a>
+			streams:   5, words:  2996
+		worklib.layer1_sram:sv <0x70942080>
+			streams:  31, words: 67864
+		worklib.layer1_systolic:sv <0x3256f1ac>
+			streams:   1, words: 10630
+		worklib.layer1_wrapper:sv <0x789a9d4d>
+			streams:   1, words:  6144
+		worklib.layer2_cnn:sv <0x1c3374e5>
+			streams: 268, words: 226662
+		worklib.layer2_result_one_side_mem:sv <0x2a7e1ccd>
+			streams:   5, words:  3235
+		worklib.layer2_systolic:sv <0x7891c9e8>
+			streams:   1, words: 36791
+		worklib.layer3_maxpooling_v2:sv <0x5feacae5>
+			streams:  51, words: 19164
+		worklib.layer3_result_mem:sv <0x125ed8ff>
+			streams:   5, words:  3235
+		worklib.layer3_sram:sv <0x20d91610>
+			streams:  27, words: 67076
+		worklib.layer3_wrapper:sv <0x531aea9f>
+			streams:   1, words:  5019
+		worklib.layer4_cnn:sv <0x31a877e2>
+			streams: 269, words: 227045
+		worklib.layer4_result_mem:sv <0x3d4ae1eb>
+			streams:   5, words:  3771
+		worklib.layer4_sram:sv <0x08991d29>
+			streams:  27, words: 67076
+		worklib.layer4_wrapper:sv <0x49621f75>
+			streams:   1, words:  5019
+		worklib.layer5_cnn:sv <0x5f59292f>
+			streams: 269, words: 227028
+		worklib.layer5_result_one_side_mem:sv <0x7a000ffd>
+			streams:   5, words:  8726
+		worklib.layer6_maxpooling_v2:sv <0x6ffa21dd>
+			streams:  51, words: 19115
+		worklib.layer6_result_mem:sv <0x7081971b>
+			streams:   5, words:  8726
+		worklib.layer7_fc:sv <0x42172e6f>
+			streams:  43, words: 33550
+		worklib.layer7_local_mem_weight:sv <0x03e530ed>
+			streams:  10, words: 15366
+		worklib.layer7_systolic:sv <0x573bffa7>
+			streams:   3, words:  6714
+		worklib.layer7_write_mem_arbitor:sv <0x1ff000e1>
+			streams:   1, words:  2000
+		worklib.load_unit:sv <0x0c32ca8d>
+			streams:   1, words:  2796
+		worklib.local_mem_bias:sv <0x613a3a2a>
+			streams:   5, words:  6216
+		worklib.local_mem_pixel:sv <0x3c165234>
+			streams:   5, words:  6662
+		worklib.local_mem_result:sv <0x38d5d3da>
+			streams:   6, words:  2022
+		worklib.local_mem_weight:sv <0x12ec4fbb>
+			streams:  12, words: 22057
+		worklib.maxpooling_2x2:sv <0x44d1498d>
+			streams:   1, words:   788
+		worklib.par_ARAW_MuxM2S:sv <0x3eeb0602>
+			streams:   4, words:  8400
+		worklib.par_ARAW_MuxM2S:sv <0x7d233a21>
+			streams:   4, words:  7644
+		worklib.par_B_MuxS2M:sv <0x5c7dbc03>
+			streams:   4, words:  4546
+		worklib.par_Decoder_S2M:sv <0x21c34886>
+			streams:   1, words:   195
+		worklib.par_Decoder_S2M:sv <0x761a7fb0>
+			streams:   1, words:   195
+		worklib.par_Decoder_S2M_ByID:sv <0x300bbf8e>
+			streams:   1, words:   928
+		worklib.par_Decoder_S2M_ByID:sv <0x4028e2ce>
+			streams:   1, words:  1320
+		worklib.par_Decoder_ready:sv <0x731138e9>
+			streams:   1, words:  3064
+		worklib.par_MuxM2S_ByID:sv <0x4d4a124e>
+			streams:   1, words:   972
+		worklib.par_MuxM2S_ByID:sv <0x5435b33c>
+			streams:   1, words:   729
+		worklib.par_MuxS2M_Ready:sv <0x3d0d0913>
+			streams:   1, words:  2033
+		worklib.par_R_MuxS2M:sv <0x37d9a84f>
+			streams:   4, words:  8742
+		worklib.par_Register:sv <0x0a5fa273>
+			streams:   2, words:   450
+		worklib.par_Register:sv <0x64653c05>
+			streams:   2, words:   444
+		worklib.par_Register_1b:sv <0x2fedc008>
+			streams:   2, words:   401
+		worklib.par_SelSlave:sv <0x07550e89>
+			streams:   4, words:  2848
+		worklib.par_W_MuxM2S:sv <0x4692513f>
+			streams:   4, words:  4409
+		worklib.par_sensor_counter:sv <0x23686c47>
+			streams:   3, words:   919
+		worklib.par_sensor_counter:sv <0x30e35f19>
+			streams:   3, words:   919
+		worklib.pc:sv <0x216a997f>
+			streams:   6, words:  2026
+		worklib.pixel_sram:sv <0x7ab6c0b7>
+			streams: 139, words: 63960
+		worklib.pixel_wrapper:sv <0x20b77bd5>
+			streams:   1, words:  6226
+		worklib.regfile:sv <0x3c6d73f9>
+			streams:   4, words:  8130
+		worklib.sensor_ctrl:sv <0x37ffa38a>
+			streams:   6, words: 11995
+		worklib.stage11_fifo:sv <0x21449921>
+			streams:   4, words: 18234
+		worklib.stage27_fifo:sv <0x6e539d69>
+			streams:   4, words: 39642
+		worklib.stage29_fifo:sv <0x0c88f6ae>
+			streams:   4, words: 31671
+		worklib.stage9_fifo:sv <0x4a0b8250>
+			streams:   4, words: 19654
+		worklib.store_unit:sv <0x260288b8>
+			streams:   4, words:  2267
+		worklib.tag_array:sv <0x5188cffe>
+			streams:  34, words: 10375
+		worklib.top_layer1:sv <0x1b8ba234>
+			streams:   1, words:   123
+		worklib.top_tb:sv <0x5dd20f48>
+			streams:  44, words: 64575
+		worklib.weight_bias_arbitor:sv <0x7309ac4e>
+			streams:   2, words:  3473
+		worklib.word64:sv <0x0e89844c>
+			streams:  67, words: 92580
+		worklib.word64_wrapper:sv <0x09dbc1b5>
+			streams:   1, words:  3997
+		worklib.word72:sv <0x114fde33>
+			streams:  69, words: 93616
+		worklib.word72_wrapper:sv <0x446b20b9>
+			streams:   1, words:  4549
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                  Instances  Unique
+		Modules:                294     117
+		Registers:             6431    2002
+		Scalar wires:          5175       -
+		Expanded wires:        3765      55
+		Vectored wires:        2109       -
+		Named events:             5       5
+		Always blocks:          560     311
+		Initial blocks:          20      20
+		Cont. assignments:      571    3574
+		Pseudo assignments:    1454    1419
+		Assertions:               5       5
+		Compilation units:        1       1
+		Simulation timescale:  10ps
+	Writing initial simulation snapshot: worklib.layer2_cnn:sv
+Loading snapshot worklib.layer2_cnn:sv .................... Done
+ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+*Verdi* Loading libsscore_ius152.so
+ncsim> source /usr/cad/cadence/INCISIV/cur/tools/inca/files/ncsimrc
+ncsim> run
+
+Done
+
+DRAM[262144] = fffffff0, pass
+DRAM[262145] = fffffff8, pass
+DRAM[262146] = 00000008, pass
+DRAM[262147] = 00000001, pass
+DRAM[262148] = 00000001, pass
+DRAM[262149] = 78787878, pass
+DRAM[262150] = 000091a2, pass
+DRAM[262151] = 00000003, pass
+DRAM[262152] = fefcfefd, pass
+DRAM[262153] = 10305070, pass
+DRAM[262154] = cccccccc, pass
+DRAM[262155] = ffffffcc, pass
+DRAM[262156] = ffffcccc, pass
+DRAM[262157] = 000000cc, pass
+DRAM[262158] = 0000cccc, pass
+DRAM[262159] = 00000d9d, pass
+DRAM[262160] = 00000004, pass
+DRAM[262161] = 00000003, pass
+DRAM[262162] = 000001a6, pass
+DRAM[262163] = 00000ec6, pass
+DRAM[262164] = 2468b7a8, pass
+DRAM[262165] = 5dbf9f00, pass
+DRAM[262166] = 00012b38, pass
+DRAM[262167] = fa2817b7, pass
+DRAM[262168] = 12345678, pass
+DRAM[262169] = 0000f000, pass
+DRAM[262170] = 00000f00, pass
+DRAM[262171] = 000000f0, pass
+DRAM[262172] = 0000000f, pass
+DRAM[262173] = 56780000, pass
+DRAM[262174] = 78000000, pass
+DRAM[262175] = 00005678, pass
+DRAM[262176] = 00000078, pass
+DRAM[262177] = 12345678, pass
+DRAM[262178] = ce780000, pass
+DRAM[262179] = ffffffff, pass
+DRAM[262180] = ffffffef, pass
+DRAM[262181] = ffffffdf, pass
+DRAM[262182] = ffffffcf, pass
+DRAM[262183] = ffffffbf, pass
+DRAM[262184] = ffffffaf, pass
+DRAM[262185] = ffffff9f, pass
+DRAM[262186] = ffffff8f, pass
+DRAM[262187] = ffffff7f, pass
+DRAM[262188] = ffffff6f, pass
+DRAM[262189] = 11111111, pass
+DRAM[262190] = ffffff6f, pass
+DRAM[262191] = ffffff7f, pass
+DRAM[262192] = ffffff8f, pass
+DRAM[262193] = ffffff9f, pass
+DRAM[262194] = ffffffaf, pass
+DRAM[262195] = ffffffbf, pass
+DRAM[262196] = ffffffcf, pass
+DRAM[262197] = ffffffdf, pass
+DRAM[262198] = ffffffef, pass
+DRAM[262199] = ffffffff, pass
+
+
+
+
+        ****************************               
+        **                        **       |__||  
+        **  Congratulations !!    **      / O.O  | 
+        **                        **    /_____   | 
+        **  Simulation PASS!!     **   /^ ^ ^ \  |
+        **                        **  |^ ^ ^ ^ |w| 
+        ****************************   \m___m__|_|
+
+
+cycle high 32bits = [          0 ]
+cycle low 32bits = [      62854 ] 
+instruction high 32bits = [          0 ] 
+instruction low 32bits = [      16870 ] 
+Simulation complete via $finish(1) at time 755436 NS + 0
+../sim/top_tb.sv:486     $finish;
+ncsim> exit
